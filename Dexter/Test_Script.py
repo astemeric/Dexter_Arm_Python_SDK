@@ -37,11 +37,6 @@ def moveTo(coords):
     #dexter.send(b'xxx xxx xxx xxx M %(x)d %(y)d %(z)d 0 0 -1 1 1 1;'%{b'x':coords[0], b'y':coords[1], b'z':coords[2]})
     #print(b'xxx xxx xxx xxx M %(x)d %(y)d %(z)d 0 0 -1 1 1 1;'%{b'x':coords[0], b'y':coords[1], b'z':coords[2]})
 
-#ignore
-def moveToHigh(coords):
-    #dexter.send(b'xxx xxx xxx xxx M %(x)d %(y)d %(z)d 0 0 -1 1 1 1;' % {b'x': coords[0], b'y': coords[1], b'z': coords[2]+10000})
-    #print(b'xxx xxx xxx xxx M %(x)d %(y)d %(z)d 0 0 -1 1 1 1;' % {b'x': coords[0], b'y': coords[1], b'z': coords[2]+10000})
-
 def move():
     #dexter.send(b'xxx xxx xxx xxx M 0 500000 100000 0 0 -1 1 1 1;')
     dexter.send(b'xxx xxx xxx xxx a 0 167000 -167000 0 0;')
@@ -65,20 +60,7 @@ zeroConf = ''
 while zeroConf != 'y':
     zeroConf = input('When in place, type y and press enter: ') # User must prompt when Dexter is at proper position
 
-# Move to start position (top left of grid):
-
-moveToHigh()
-
-#for i in range(len(points)):
-#    moveToHigh(points[i])
-#    time.sleep(0.5)
-#    moveTo(points[i])
-#    time.sleep(2)
-#    moveToHigh(points[i])
-#    time.sleep(0.5)
-    # proceed = ''
-    # while proceed != 'y':
-    #    proceed = input('When ready to continue to next point, type y and press enter: ')
+move()
 
 print('Exiting...')
 dexter.close()
