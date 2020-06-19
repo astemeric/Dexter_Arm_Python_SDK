@@ -2,6 +2,9 @@ import socket
 import time
 import threading
 
+#####!!!!#####
+#Will need to add a mutex since two threads are sharing the same socket!
+
 ########## Jason Notes #########
 # +-334000 seems to be about 90 degrees for joints
 # +-3711 (334000/90) per degree
@@ -16,73 +19,96 @@ import threading
 ########## Old Notes ###########
 #The old notes are useless now in my opinion
 
-dex_ip = '192.168.1.142'
-dex_port = 50000
-number_of_addresses = 64
-size_of_data = 4 #bytes
-bufferSize = number_of_addresses * size_of_data
-
 def connect():
-    # Connect to Dexter to send him commands
+    # Connect to Dexter to send it commands
+
+    dex_ip = '192.168.1.142'
+    dex_port = 50000
+
     global dexter
     dexter = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     dexter.connect((dex_ip, dex_port))
 
-def moveTo(coords):
-    # This way of encoding works!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    #dexter.send(b'xxx xxx xxx xxx M %(x)d %(y)d %(z)d 0 0 -1 1 1 1;'%{b'x':coords[0], b'y':coords[1], b'z':coords[2]})
+    global statusSocket
+    statusSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    statusSocket.connect((dex_ip, dex_port))
 
-    print(b'xxx xxx xxx xxx M %(x)d %(y)d %(z)d 0 0 -1 1 1 1;'%{b'x':coords[0], b'y':coords[1], b'z':coords[2]})
+#send in the thetas in terms of degrees
+def move_a5(theta1, theta2, theta3, theta4, theta5):
+
+    if abs(theta1) < 180 and abs(theta2) < 180 and abs(theta3) < 180 and abs(theta4) < 180 and abs(theta5) < 180:
+
+        theta1 = theta1 * degree
+        theta2 = theta2 * degree
+        theta3 = theta3 * degree
+        theta4 = theta4 * degree
+        theta5 = theta5 * degree
+
+        dexter.send(b'xxx xxx xxx xxx a %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5})
+        #make sure you read after every send, so we don't clog up the buffer - not sure if Python will hold old messages in the buffer
+        status = dexter.recv(bufferSize)
+
+    else:
+        print("Please send in a valid theta value in terms of degrees")
+
+#send in the thetas in terms of degrees
+def move_a7(theta1, theta2, theta3, theta4, theta5, theta6, theta7):
+
+    if abs(theta1) < 180 and abs(theta2) < 180 and abs(theta3) < 180 and abs(theta4) < 180 and abs(theta5) < 180 and abs(theta6) < 180 and abs(theta7) < 180:
+
+        theta1 = theta1 * degree
+        theta2 = theta2 * degree
+        theta3 = theta3 * degree
+        theta4 = theta4 * degree
+        theta5 = theta5 * degree
+        theta6 = theta6 * degree
+        theta7 = theta7 * degree
+
+        dexter.send(b'xxx xxx xxx xxx a %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d %(t6)d %(t7)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5, b't6':theta6, b't7':theta7})
+        status = dexter.recv(bufferSize)
+
+    else:
+        print("Please send in a valid theta value in terms of degrees")
+
+#send in the thetas in terms of degrees
+def move_p(theta1, theta2, theta3, theta4, theta5):
+
+    if abs(theta1) < 180 and abs(theta2) < 180 and abs(theta3) < 180 and abs(theta4) < 180 and abs(theta5) < 180:
+
+        theta1 = theta1 * degree
+        theta2 = theta2 * degree
+        theta3 = theta3 * degree
+        theta4 = theta4 * degree
+        theta5 = theta5 * degree
+
+        dexter.send(b'xxx xxx xxx xxx P %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5})
+        status = dexter.recv(bufferSize)
+
+    else:
+        print("Please send in a valid theta value in terms of degrees")
+
 
 def moveToHigh():
-    #When sending a command, the return value will be the current robot status
-    dexter.send(b'xxx xxx xxx xxx g;')
 
-    #So the status object will contain all of the information in a byte array
-    status = dexter.recv(bufferSize)
-    print("\n\nStart:")
 
-    #But we can't glean information from a byte array without
-    #Decoding it to an int array
-    convertMessage(status)
-    time.sleep(1)
-
-    dexter.send(b'1 1 xxx xxx P 167000 0 0 0 0;')
-    status = dexter.recv(bufferSize)
-    print("Start Result (should be same as start):")
-    print("(Cmd 1 just input):")
-    convertMessage(status)
+    move_a5(-45, 0, 0 ,0 ,0)
     time.sleep(6)
 
-    dexter.send(b'2 1 xxx xxx P -167000 0 0 0 0;')
-    status = dexter.recv(bufferSize)
-    print("Cmd 1 Result:")
-    print("(Cmd 2 just input):")
-    convertMessage(status)
+    move_a5(45, 0, 0 ,0 ,0)
     time.sleep(6)
 
-    dexter.send(b'1 2 100 300 P 167000 0 0 0 0;')
-    status = dexter.recv(bufferSize)
-    print("Cmd 2 Result:")
-    print("(Cmd 3 just input):")
-    convertMessage(status)
+    move_a5(-45, 0, 0 ,0 ,0)
     time.sleep(6)
 
-
-    dexter.send(b'3 4 600 9999 P 0 0 0 0 0;')
-    status = dexter.recv(bufferSize)
-    print("Cmd 3 Result:")
-    print("(Cmd 4 just input):")
-    convertMessage(status)
+    move_a5(0, 0, 0 ,0 ,0)
     time.sleep(6)
 
-    dexter.send(b'xxx xxx xxx xxx g;')
-    status = dexter.recv(bufferSize)
-    print("Cmd 4 Result (Should be same as Start Result):")
-    convertMessage(status)
-    time.sleep(6)
 
 #Used to convert the byte object to  4byte integer objects
+#When sending a command, the return value will be the current robot status
+#So the status object will contain all of the information in a byte array
+#But we can't glean information from a byte array without
+#Decoding it to an int array using ConverMessage(status)
 def convertMessage(byte_Status):
     finalList = [None]*60
 
@@ -155,27 +181,58 @@ def printCurrentStatus(cur_List):
 #Function to print individual joint information
 def printJoint(joint_Data, joint_Number):
     print("\tJoint " + str(joint_Number) + ": ")
-    print("\t\tBASE_POSITION_AT: " + str(joint_Data[0])
-    + "\tBASE_POSITION_DELTA: " + str(joint_Data[1])
-    + "\tBASE_POSITION_PID_DELTA: " + str(joint_Data[2])
-    + "\tBASE_POSITION_FORCE_DELTA: " + str(joint_Data[3])
+    print("\t\tBASE_POSITION_AT: " + str(round(joint_Data[0]/degree,2))
+    + "\tBASE_POSITION_DELTA: " + str(round(joint_Data[1]/degree,2))
+    + "\tBASE_POSITION_PID_DELTA: " + str(round(joint_Data[2]/degree,2))
+    + "\tBASE_POSITION_FORCE_DELTA: " + str(round(joint_Data[3],2))
     + "\tBASE_SIN: " + str(joint_Data[4])
     + "\n\t\tBASE_COS: " + str(joint_Data[5])
-    + "\tBASE_MEASURED_ANGLE: " + str(joint_Data[6])
-    + "\tSENT_BASE_POSITION: " + str(joint_Data[7])
-    + "\tSLOPE_BASE_POSITION: " + str(joint_Data[8])
+    + "\tBASE_MEASURED_ANGLE: " + str(round(joint_Data[6]/degree,2))
+    + "\tSENT_BASE_POSITION: " + str(round(joint_Data[7]/degree*-4.05,2))
+    + "\tSLOPE_BASE_POSITION: " + str(round(joint_Data[8],2))
     + "\tEmpty: " + str(joint_Data[9]) + "\n")
 
+#Function to receive status updates
+#Note - we're using the same socket to send!
+#If we increase the update rate, we will run into race conditions
+#Will need to add a mutex soon
+def receiveStatusUpdate():
+    while threadStopped == 0:
+        print("Thread Update")
+        dexter.send(b'xxx xxx xxx xxx g;')
+        status = dexter.recv(bufferSize)
+        convertMessage(status)
+        time.sleep(.5)
+
+
 # Connect to Dexter:
-connect()
-time.sleep(1)
 
-zeroConf = ''
-while zeroConf != 'y':
-    zeroConf = input('When in place, type y and press enter: ') # User must prompt when Dexter is at proper position
+if __name__ == "__main__":
+    global bufferSize
+    global threadStopped
+    global degree
+    degree = 3711
+    threadStopped = 0
 
-moveToHigh()
-#readStatus()
+    number_of_addresses = 64
+    size_of_data = 4 #bytes
+    bufferSize = number_of_addresses * size_of_data
 
-print('Exiting...')
-dexter.close()
+    connect()
+    time.sleep(1)
+
+    zeroConf = ''
+    while zeroConf != 'y':
+        zeroConf = input('When in place, type y and press enter: ') # User must prompt when Dexter is at proper position
+
+    updateStatus = threading.Thread(target = receiveStatusUpdate, args=())
+    updateStatus.start()
+
+    print("Moving...")
+
+    moveToHigh()
+    #thread is not holding critical resource, so we're good
+    threadStopped = 1
+
+    print('Exiting...')
+    dexter.close()
