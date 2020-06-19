@@ -1,3 +1,5 @@
+#This is a test script if you just want to get the arm moving
+
 import socket
 import time
 
