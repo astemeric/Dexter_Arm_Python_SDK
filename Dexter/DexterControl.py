@@ -4,8 +4,6 @@ import time
 import threading
 import logging
 import grpc
-#import helloworld_pb2
-#import helloworld_pb2_grpc
 
 #####!!!!#####
 #Will need to add a mutex since two threads are sharing the same socket!
@@ -59,15 +57,15 @@ def move_a5(theta1, theta2, theta3, theta4, theta5):
 #send in the thetas in terms of degrees
 def move_a7(theta1, theta2, theta3, theta4, theta5, theta6, theta7):
 
-    if abs(theta1) < 180 and abs(theta2) < 180 and abs(theta3) < 180 and abs(theta4) < 180 and abs(theta5) < 180 and abs(theta6) < 180 and abs(theta7) < 180:
+    if abs(theta1) < 180 and abs(theta2) < 180 and abs(theta3) < 180 and abs(theta4) < 180 and abs(theta5) < 180 and abs(theta6) < 1024 and abs(theta7) < 700 and abs(theta7) > 124 :
 
         theta1 = theta1 * degree
         theta2 = theta2 * degree
         theta3 = theta3 * degree
         theta4 = theta4 * degree
         theta5 = theta5 * degree
-        theta6 = theta6 * degree
-        theta7 = theta7 * degree
+        #theta6 = theta6 * degree
+        #theta7 = theta7 * degree
 
         dexter.send(b'xxx xxx xxx xxx a %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d %(t6)d %(t7)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5, b't6':theta6, b't7':theta7})
         status = dexter.recv(bufferSize)
@@ -93,20 +91,28 @@ def move_p(theta1, theta2, theta3, theta4, theta5):
         print("Please send in a valid theta value in terms of degrees")
 
 
-def moveToHigh():
+def run():
 
 
-    move_p(-45, 0, 0 ,0 ,0)
-    time.sleep(6)
+    move_a7(0, 0, 0 ,0 ,0, 0, 125)
+    #move_a5(0, 0, 0 ,0 ,0)
+    time.sleep(1)
 
-    move_p(45, 0, 0 ,0 ,0)
-    time.sleep(6)
+    print("Sending 520")
+    move_a7(0, 0, 0 ,0 ,0, 0, 699)
+    #move_a5(90, 0, 0 ,0 ,0)
+    time.sleep(1)
 
-    move_p(-45, 0, 0 ,0 ,0)
-    time.sleep(6)
+    #move_a5(0, 0, 0 ,0 ,0)
 
-    move_p(0, 0, 0 ,0 ,0)
-    time.sleep(6)
+    move_a7(0, 0, 0 ,0 ,0, 0, 125)
+    time.sleep(1)
+
+    #move_a7(0, 0, 0 ,0 ,0, 0, 700)
+    #time.sleep(1)
+
+    #move_a7(0, 0, 0 ,0 ,0, 0, 0)
+    #time.sleep(1)
 
 
 #Used to convert the byte object to  4byte integer objects
@@ -207,11 +213,9 @@ def receiveStatusUpdate():
         dexter.send(b'xxx xxx xxx xxx g;')
         status = dexter.recv(bufferSize)
         convertMessage(status)
-        time.sleep(.3)
-
+        time.sleep(.5)
 
 # Connect to Dexter:
-
 if __name__ == "__main__":
     global bufferSize
     global threadStopped
@@ -235,7 +239,7 @@ if __name__ == "__main__":
 
     print("Moving...")
 
-    moveToHigh()
+    run()
     #thread is not holding critical resource, so we're good
     threadStopped = 1
 
