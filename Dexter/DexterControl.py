@@ -57,7 +57,7 @@ def move_a5(theta1, theta2, theta3, theta4, theta5):
 #send in the thetas in terms of degrees
 def move_a7(theta1, theta2, theta3, theta4, theta5, theta6, theta7):
 
-    if abs(theta1) < 180 and abs(theta2) < 180 and abs(theta3) < 180 and abs(theta4) < 180 and abs(theta5) < 180 and abs(theta6) < 1024 and abs(theta7) < 700 and abs(theta7) > 124 :
+    if abs(theta1) < 180 and abs(theta2) < 180 and abs(theta3) < 180 and abs(theta4) < 180 and abs(theta5) < 180 and abs(theta6) < 1024 and abs(theta7) < 700:
 
         theta1 = theta1 * degree
         theta2 = theta2 * degree
@@ -67,11 +67,27 @@ def move_a7(theta1, theta2, theta3, theta4, theta5, theta6, theta7):
         #theta6 = theta6 * degree
         #theta7 = theta7 * degree
 
+        if theta7 < 125:
+            theta7 = 125
+
         dexter.send(b'xxx xxx xxx xxx a %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d %(t6)d %(t7)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5, b't6':theta6, b't7':theta7})
         status = dexter.recv(bufferSize)
 
     else:
         print("Please send in a valid theta value in terms of degrees")
+
+def move_End_Effector(theta6, theta7):
+
+    if abs(theta6) < 1024 and abs(theta7) < 700:
+
+        if theta7 < 125:
+            theta7 = 125
+
+        dexter.send(b'xxx xxx xxx xxx a 0 0 0 0 0 %(t6)d %(t7)d;'%{b't6':theta6, b't7':theta7})
+        status = dexter.recv(bufferSize)
+
+    else:
+        print("Please send in a valid theta value")
 
 #send in the thetas in terms of degrees
 def move_p(theta1, theta2, theta3, theta4, theta5):
@@ -93,27 +109,20 @@ def move_p(theta1, theta2, theta3, theta4, theta5):
 
 def run():
 
+    move_p(45, 0, 0, 0, 0)
+    time.sleep(3)
 
-    move_a7(0, 0, 0 ,0 ,0, 0, 125)
+    move_End_Effector(200, 699)
     #move_a5(0, 0, 0 ,0 ,0)
-    time.sleep(1)
+    time.sleep(3)
 
-    print("Sending 520")
-    move_a7(0, 0, 0 ,0 ,0, 0, 699)
+    move_End_Effector(0, 125)
     #move_a5(90, 0, 0 ,0 ,0)
-    time.sleep(1)
+    time.sleep(3)
 
     #move_a5(0, 0, 0 ,0 ,0)
-
-    move_a7(0, 0, 0 ,0 ,0, 0, 125)
-    time.sleep(1)
-
-    #move_a7(0, 0, 0 ,0 ,0, 0, 700)
-    #time.sleep(1)
-
-    #move_a7(0, 0, 0 ,0 ,0, 0, 0)
-    #time.sleep(1)
-
+    move_p(0, 0, 0 ,0 ,0)
+    time.sleep(3)
 
 #Used to convert the byte object to  4byte integer objects
 #When sending a command, the return value will be the current robot status
