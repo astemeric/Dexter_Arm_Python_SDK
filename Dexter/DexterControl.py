@@ -1,6 +1,11 @@
+from __future__ import print_function
 import socket
 import time
 import threading
+import logging
+import grpc
+#import helloworld_pb2
+#import helloworld_pb2_grpc
 
 #####!!!!#####
 #Will need to add a mutex since two threads are sharing the same socket!
@@ -91,16 +96,16 @@ def move_p(theta1, theta2, theta3, theta4, theta5):
 def moveToHigh():
 
 
-    move_a5(-45, 0, 0 ,0 ,0)
+    move_p(-45, 0, 0 ,0 ,0)
     time.sleep(6)
 
-    move_a5(45, 0, 0 ,0 ,0)
+    move_p(45, 0, 0 ,0 ,0)
     time.sleep(6)
 
-    move_a5(-45, 0, 0 ,0 ,0)
+    move_p(-45, 0, 0 ,0 ,0)
     time.sleep(6)
 
-    move_a5(0, 0, 0 ,0 ,0)
+    move_p(0, 0, 0 ,0 ,0)
     time.sleep(6)
 
 
@@ -202,7 +207,7 @@ def receiveStatusUpdate():
         dexter.send(b'xxx xxx xxx xxx g;')
         status = dexter.recv(bufferSize)
         convertMessage(status)
-        time.sleep(.5)
+        time.sleep(.3)
 
 
 # Connect to Dexter:
