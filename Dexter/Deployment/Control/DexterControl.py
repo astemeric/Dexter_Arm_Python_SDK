@@ -33,7 +33,6 @@ class ConfigurationUpdate(configuration_update_pb2_grpc.ConfigurationUpdateServi
         status = dexter.recv(bufferSize)
         jointList = convertMessage(status)
 
-        note, these two should be the same data
         joint1_Curr = jointList[12]/degree
         joint1_Goal = jointList[16]/degree
         joint2_Curr = jointList[22]/degree
