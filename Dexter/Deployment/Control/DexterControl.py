@@ -11,7 +11,6 @@ import configuration_update_pb2
 import configuration_update_pb2_grpc
 
 #####!!!!#####
-#UNCOMMENT THE DEXTER COMMANDS. CURRENTLY ONLY PRINTING
 
 ########## Jason Notes #########
 # +-334000 seems to be about 90 degrees for joints
@@ -30,33 +29,21 @@ import configuration_update_pb2_grpc
 class ConfigurationUpdate(configuration_update_pb2_grpc.ConfigurationUpdateServicer):
 
     def SendUpdate(self, request, context):
-        #uncomment
-        #dexter.send(b'xxx xxx xxx xxx g;')
-        #status = dexter.recv(bufferSize)
-        #jointList = convertMessage(status)
+        dexter.send(b'xxx xxx xxx xxx g;')
+        status = dexter.recv(bufferSize)
+        jointList = convertMessage(status)
 
-        #note, these two should be the same data
-        #joint1_Curr = jointList[12]/degree
-        #joint1_Goal = jointList[16]/degree
-        #joint2_Curr = jointList[22]/degree
-        #joint2_Goal = jointList[26]/degree
-        #joint3_Curr = jointList[32]/degree
-        #joint3_Goal = jointList[36]/degree
-        #joint4_Curr = jointList[42]/degree
-        #joint4_Goal = jointList[46]/degree
-        #joint5_Curr = jointList[52]/degree
-        #joint5_Goal = jointList[56]/degree
-
-        joint1_Curr = 3.1415
-        joint1_Goal = 3.1415
-        joint2_Curr = 3.1415
-        joint2_Goal = 3.1415
-        joint3_Curr = 3.1415
-        joint3_Goal = 3.1415
-        joint4_Curr = 3.1415
-        joint4_Goal = 3.1415
-        joint5_Curr = 3.1415
-        joint5_Goal = 3.1415
+        note, these two should be the same data
+        joint1_Curr = jointList[12]/degree
+        joint1_Goal = jointList[16]/degree
+        joint2_Curr = jointList[22]/degree
+        joint2_Goal = jointList[26]/degree
+        joint3_Curr = jointList[32]/degree
+        joint3_Goal = jointList[36]/degree
+        joint4_Curr = jointList[42]/degree
+        joint4_Goal = jointList[46]/degree
+        joint5_Curr = jointList[52]/degree
+        joint5_Goal = jointList[56]/degree
 
         JointMessage = robot_arm_pb2.robotConfiguration()
         JointMessage.j1.currentAngle = joint1_Curr
@@ -134,9 +121,9 @@ def move_a5(theta1, theta2, theta3, theta4, theta5):
         theta4 = theta4 * degree
         theta5 = theta5 * degree
 
-        #dexter.send(b'xxx xxx xxx xxx a %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5})
-        #status = dexter.recv(bufferSize)
-        print(b'xxx xxx xxx xxx a %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5})
+        dexter.send(b'xxx xxx xxx xxx a %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5})
+        status = dexter.recv(bufferSize)
+        #print(b'xxx xxx xxx xxx a %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5})
 
         sendSuccess = 1
 
@@ -164,9 +151,9 @@ def move_a7(theta1, theta2, theta3, theta4, theta5, theta6, theta7):
         if theta7 < 125:
             theta7 = 125
 
-        #dexter.send(b'xxx xxx xxx xxx a %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d %(t6)d %(t7)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5, b't6':theta6, b't7':theta7})
-        #status = dexter.recv(bufferSize)
-        print(b'xxx xxx xxx xxx a %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d %(t6)d %(t7)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5, b't6':theta6, b't7':theta7})
+        dexter.send(b'xxx xxx xxx xxx a %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d %(t6)d %(t7)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5, b't6':theta6, b't7':theta7})
+        status = dexter.recv(bufferSize)
+        #print(b'xxx xxx xxx xxx a %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d %(t6)d %(t7)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5, b't6':theta6, b't7':theta7})
 
         sendSuccess = 1
 
@@ -183,9 +170,9 @@ def move_End_Effector(theta6, theta7):
         if theta7 < 125:
             theta7 = 125
 
-        #dexter.send(b'xxx xxx xxx xxx a 0 0 0 0 0 %(t6)d %(t7)d;'%{b't6':theta6, b't7':theta7})
-        #status = dexter.recv(bufferSize)
-        print(b'xxx xxx xxx xxx a 0 0 0 0 0 %(t6)d %(t7)d;'%{b't6':theta6, b't7':theta7})
+        dexter.send(b'xxx xxx xxx xxx a 0 0 0 0 0 %(t6)d %(t7)d;'%{b't6':theta6, b't7':theta7})
+        status = dexter.recv(bufferSize)
+        #print(b'xxx xxx xxx xxx a 0 0 0 0 0 %(t6)d %(t7)d;'%{b't6':theta6, b't7':theta7})
 
         sendSuccess = 1
 
@@ -206,9 +193,9 @@ def move_p5(theta1, theta2, theta3, theta4, theta5):
         theta4 = theta4 * degree
         theta5 = theta5 * degree
 
-        #dexter.send(b'xxx xxx xxx xxx P %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5})
-        #status = dexter.recv(bufferSize)
-        print(b'xxx xxx xxx xxx P %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5})
+        dexter.send(b'xxx xxx xxx xxx P %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5})
+        status = dexter.recv(bufferSize)
+        #print(b'xxx xxx xxx xxx P %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5})
 
         sendSuccess = 1
 
@@ -234,9 +221,9 @@ def move_p7(theta1, theta2, theta3, theta4, theta5, theta6, theta7):
         if theta7 < 125:
             theta7 = 125
 
-        #dexter.send(b'xxx xxx xxx xxx P %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d %(t6)d %(t7)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5, b't6':theta6, b't7':theta7})
-        #status = dexter.recv(bufferSize)
-        print(b'xxx xxx xxx xxx P %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d %(t6)d %(t7)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5, b't6':theta6, b't7':theta7})
+        dexter.send(b'xxx xxx xxx xxx P %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d %(t6)d %(t7)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5, b't6':theta6, b't7':theta7})
+        status = dexter.recv(bufferSize)
+        #print(b'xxx xxx xxx xxx P %(t1)d %(t2)d %(t3)d %(t4)d %(t5)d %(t6)d %(t7)d;'%{b't1':theta1, b't2':theta2, b't3':theta3, b't4':theta4, b't5':theta5, b't6':theta6, b't7':theta7})
 
         sendSuccess = 1
 
@@ -328,8 +315,7 @@ if __name__ == "__main__":
     size_of_data = 4 #bytes
     bufferSize = number_of_addresses * size_of_data
 
-    #uncomment
-    #connect()
+    connect()
     GRPCServer()
 
     print('Exiting...')
