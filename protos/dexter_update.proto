@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package SpotPlusArm;
+
+import "robot_arm.proto";
+
+  //The rpc method definitions are defined with regards to the server
+  //So SendUpdate will receive a ConfigRequest from the client
+  //Given this syntax, it seems as though the ConfigRequest is "passed"
+  //into the SendUpdate - but it's just syntax.
+  //On the client end, the client will make the request, and hold onto
+  //the "stub" of that request.
+
+service DexterUpdate {
+
+  rpc SendUpdate (dexterStatus) returns (dexterConfiguration) {}
+
+  rpc Move5 (dexterRequest5) returns (dexterStatus) {}
+
+  rpc Move7 (dexterRequest7) returns (dexterStatus) {}
+
+}
