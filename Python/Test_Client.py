@@ -1,4 +1,4 @@
-from DexterClient import DexterClient
+from Dexter import DexterClient
 import time
 
 dexter = DexterClient()

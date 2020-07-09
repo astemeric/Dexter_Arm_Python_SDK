@@ -1,4 +1,4 @@
-from CoreServer import CoreServer
+from ProjectCore import CoreServer
 
 server = CoreServer()
 server.StartDexterServer()
