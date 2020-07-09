@@ -1,12 +1,11 @@
 from concurrent import futures
-from Dexter import DexterServer
+from DexterServer import DexterServer
+import dexter_update_pb2
+import dexter_update_pb2_grpc
 import time
 import logging
 import threading
 import grpc
-import dexter_update_pb2
-import dexter_update_pb2_grpc
-
 
 class CoreServer:
 
